@@ -90,7 +90,7 @@ CONTAINS
     write(*,*) "num_unitcell_points:", num_unitcell_points
     write(*,*) "num_atoms_per_molecule:", num_atoms_per_molecule
     
-    num_total_points = num_unitcell_points * (dim ** dim)
+    num_total_points = num_unitcell_points * (3 ** dim)
 
     allocate(points(num_total_points, dim), STAT=stat)
     if (stat /= 0 ) then
