@@ -145,33 +145,32 @@ CONTAINS
     do i = 0, 2
        do j = 0, 2
           if (i==0 .AND. j==0) then !unit cell need no change
-                CYCLE
-             end if
-             cell_index = dim**1 * i + dim**0 * j
-             !change 1 to -1, 2 to 1 and 0 remains 0
-             if (i > 0) then
-                ii = i*2 - 3
-             else
-                ii = 0
-             end if
-             if (j > 0) then
-                jj = j*2 - 3
-             else
-                jj = 0
-             end if
-             !for x-direction (i-direction)
-             points(num_unitcell_points * cell_index + 1 : &
-                  & num_unitcell_points * (cell_index + 1), 1) = &
-                  & points(1:num_unitcell_points, 1) + unitcell_dim(1) * ii
-             !for y-direction (j-direction)
-             points(num_unitcell_points * cell_index + 1 : &
-                  & num_unitcell_points * (cell_index + 1), 2) = &
-                  & points(1:num_unitcell_points, 2) + unitcell_dim(2) * jj
-             !for z-direction (remain the same)
-             points(num_unitcell_points * cell_index + 1 : &
-                  & num_unitcell_points * (cell_index + 1), 3) = &
-                  & points(1:num_unitcell_points, 3)
-          end do
+             CYCLE
+          end if
+          cell_index = dim**1 * i + dim**0 * j
+          !change 1 to -1, 2 to 1 and 0 remains 0
+          if (i > 0) then
+             ii = i*2 - 3
+          else
+             ii = 0
+          end if
+          if (j > 0) then
+             jj = j*2 - 3
+          else
+             jj = 0
+          end if
+          !for x-direction (i-direction)
+          points(num_unitcell_points * cell_index + 1 : &
+               & num_unitcell_points * (cell_index + 1), 1) = &
+               & points(1:num_unitcell_points, 1) + unitcell_dim(1) * ii
+          !for y-direction (j-direction)
+          points(num_unitcell_points * cell_index + 1 : &
+               & num_unitcell_points * (cell_index + 1), 2) = &
+               & points(1:num_unitcell_points, 2) + unitcell_dim(2) * jj
+          !for z-direction (remain the same)
+          points(num_unitcell_points * cell_index + 1 : &
+               & num_unitcell_points * (cell_index + 1), 3) = &
+               & points(1:num_unitcell_points, 3)
        end do
     end do
     deallocate(unitcell_dim)
