@@ -139,16 +139,15 @@ CONTAINS
 
   SUBROUTINE generate_periodic_data()
     IMPLICIT NONE
-    INTEGER :: i, j, k, Cell_index, ii, jj, kk
+    INTEGER :: i, j, cell_index, ii, jj
     !1: minus unit cell dim, 2: plus unit cell dim, 0: stay the same
     !cell_index: turn a base-3 number into a base-10 number
     do i = 0, 2
        do j = 0, 2
-          do k = 0, 2
-             if (i==0 .AND. j==0 .AND. k==0) then !unit cell need no change
+          if (i==0 .AND. j==0) then !unit cell need no change
                 CYCLE
              end if
-             cell_index = dim**2 * i + dim**1 * j + dim**0 * k
+             cell_index = dim**1 * i + dim**0 * j
              !change 1 to -1, 2 to 1 and 0 remains 0
              if (i > 0) then
                 ii = i*2 - 3
@@ -160,11 +159,6 @@ CONTAINS
              else
                 jj = 0
              end if
-             if (k > 0) then
-                kk = k*2 - 3
-             else
-                kk = 0
-             end if
              !for x-direction (i-direction)
              points(num_unitcell_points * cell_index + 1 : &
                   & num_unitcell_points * (cell_index + 1), 1) = &
@@ -173,10 +167,10 @@ CONTAINS
              points(num_unitcell_points * cell_index + 1 : &
                   & num_unitcell_points * (cell_index + 1), 2) = &
                   & points(1:num_unitcell_points, 2) + unitcell_dim(2) * jj
-             !for z-direction (k-direction)
+             !for z-direction (remain the same)
              points(num_unitcell_points * cell_index + 1 : &
                   & num_unitcell_points * (cell_index + 1), 3) = &
-                  & points(1:num_unitcell_points, 3) + unitcell_dim(3) * kk
+                  & points(1:num_unitcell_points, 3)
           end do
        end do
     end do
