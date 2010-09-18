@@ -20,7 +20,7 @@ PROGRAM voronoi
   INTEGER, PARAMETER :: temp_qconvex_fileid = 14
   CHARACTER(LEN=*), PARAMETER :: temp_qconvex_filename = "qconvex.tmp"
   INTEGER, PARAMETER :: volume_result_fileid = 15
-  CHARACTER(LEN=*), PARAMETER :: volume_result_filename = "volume.result"
+  CHARACTER(LEN=128) :: volume_result_filename
   INTEGER, EXTERNAL :: count_num_data_in_line
 
   !check if qhull binary files are in the system PATH
@@ -53,7 +53,9 @@ PROGRAM voronoi
      call generate_periodic_data()
      call output_temp_datafile() !output temp file for external program qhull
      call use_qhull()
-     write(*,"(I3,'% is done')") INT(REAL(i)/REAL(num_frames)*100)
+     if (INT(REAL(i-1)/REAL(num_frames)*100) < INT(REAL(i)/REAL(num_frames)*100)) then
+        write(*,"(I3,'% is done')") INT(REAL(i)/REAL(num_frames)*100)
+     end if
   end do
   call clean() !delete the used temp files. 
                         !For the purpose of debugging, one can comment out this subroutine call
@@ -68,9 +70,17 @@ CONTAINS
     call GET_COMMAND_ARGUMENT(NUMBER=1, VALUE=input_filename, STATUS=stat)
     if (stat /= 0) then
        call GET_COMMAND_ARGUMENT(NUMBER=0, VALUE=command)
-       write(*,*) "Usage: " // TRIM(ADJUSTL(command)) // " data_file"
+       write(*,*) "Usage: " // TRIM(ADJUSTL(command)) // " <data_file> <result_file>"
        call EXIT(1)
     end if
+
+    !read the result file name from command line argument
+    call GET_COMMAND_ARGUMENT(NUMBER=2, VALUE=volume_result_filename, STATUS=stat)
+    if (stat /= 0) then
+       call GET_COMMAND_ARGUMENT(NUMBER=0, VALUE=command)
+       write(*,*) "Usage: " // TRIM(ADJUSTL(command)) // " <data_file> <result_file>"
+       call EXIT(1)
+    end if    
 
     open(UNIT=input_fileid, FILE=input_filename, STATUS='OLD', IOSTAT=stat, ACTION='READ')
     if (stat /= 0) then
@@ -268,7 +278,8 @@ CONTAINS
           close(UNIT=temp_qconvex_fileid, STATUS='KEEP')
        end if
     end do
-    write(UNIT=volume_result_fileid, FMT=*) "Average density:", SUM(density)/SIZE(density)
+!    write(UNIT=volume_result_fileid, FMT=*) "Average density:", SUM(density)/SIZE(density)
+    write(UNIT=volume_result_fileid, FMT=*) SUM(density)/SIZE(density)
 
     deallocate(voronoi_region)
     deallocate(voronoi_vertices)
