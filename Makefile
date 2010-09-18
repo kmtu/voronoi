@@ -13,14 +13,14 @@ PROGRAM = voronoi
 
 vpath %.f90 $(SRCDIR)
 vpath %.o $(SRCDIR)
-vpath % $(OUTDIR)
+#vpath % $(OUTDIR)
 
 # Program ==================================
 all : $(PROGRAM)
 .PHONY : all 
 # ---------------------------
-voronoi : voronoi.o intre2.o
-	$(FC) -o $(OUTDIR)$(@F) $(addprefix $(SRCDIR), $^ )
+voronoi : voronoi.o
+	$(FC) -o $(OUTDIR)$(@F) $(addprefix $(SRCDIR), $^)
 
 voronoi.o : voronoi.f90
 	$(FC) -o $(SRCDIR)$(@F) -c $< $(FCFLAGS)

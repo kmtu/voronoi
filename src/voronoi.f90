@@ -1,13 +1,13 @@
-!This is for Voronoi analysis in XY periodic and 3-dimensions
+!This is for Voronoi analysis in XY periodic and 2-dimensions
 PROGRAM voronoi
   IMPLICIT NONE
   INTEGER :: num_unitcell_points, num_total_points, stat, num_frames, dummy, num_atoms
   INTEGER :: num_atoms_per_molecule, i
-  INTEGER, PARAMETER :: dim = 3
+  INTEGER, PARAMETER :: dim = 2
   !number of total points includes points in other periodic cells adjacent to the unit cell
   REAL(KIND=8), DIMENSION(:), ALLOCATABLE :: unitcell_dim
   REAL(KIND=8), DIMENSION(:, :), ALLOCATABLE :: points
-  INTEGER, DIMENSION(:, :), ALLOCATABLE :: int_points
+  INTEGER, DIMENSION(:), ALLOCATABLE :: int_points
   !points of unit cell will be arranged in the array from the start
   INTEGER, PARAMETER :: input_fileid = 10
   CHARACTER(LEN=128) :: input_filename
@@ -91,8 +91,7 @@ CONTAINS
     write(*,*) "num_unitcell_points:", num_unitcell_points
     write(*,*) "num_atoms_per_molecule:", num_atoms_per_molecule
     
-    num_total_points = num_unitcell_points * (3 ** (dim-1))
-    !(dim-1) because it is not periodic in z-direction
+    num_total_points = num_unitcell_points * (3 ** dim)
 
     allocate(points(num_total_points, dim), STAT=stat)
     if (stat /= 0 ) then
@@ -100,7 +99,7 @@ CONTAINS
        call EXIT(1)
     end if
 
-    allocate(int_points(num_total_points, dim), STAT=stat)
+    allocate(int_points(dim), STAT=stat)
     if (stat /= 0 ) then
        write(*,*) "Error: allocating int_points() fail."
        call EXIT(1)
@@ -119,12 +118,14 @@ CONTAINS
 
     read(input_fileid, *) unitcell_dim(1)
     read(input_fileid, *) unitcell_dim(2), unitcell_dim(2)
-    read(input_fileid, *) unitcell_dim(3), unitcell_dim(3), unitcell_dim(3)
+    read(input_fileid, *) 
 !    write(*,*) unitcell_dim !output
 
     do i = 1, num_unitcell_points
-       call intre2(input_fileid, 1, int_points(i,1), int_points(i,2), int_points(i,3),&
-            & points(i,1), points(i,2), points(i,3))
+       read(input_fileid, *) int_points
+       do j = 1, dim
+          points(i,j) = dble(int_points(j))*5.0d2/dble(2**30)
+       end do
        do j = 1, num_atoms_per_molecule - 1
           read(input_fileid, *)
        end do
@@ -147,7 +148,7 @@ CONTAINS
           if (i==0 .AND. j==0) then !unit cell need no change
              CYCLE
           end if
-          cell_index = dim**1 * i + dim**0 * j
+          cell_index = 3**1 * i + 3**0 * j
           !change 1 to -1, 2 to 1 and 0 remains 0
           if (i > 0) then
              ii = i*2 - 3
@@ -167,10 +168,6 @@ CONTAINS
           points(num_unitcell_points * cell_index + 1 : &
                & num_unitcell_points * (cell_index + 1), 2) = &
                & points(1:num_unitcell_points, 2) + unitcell_dim(2) * jj
-          !for z-direction (remain the same)
-          points(num_unitcell_points * cell_index + 1 : &
-               & num_unitcell_points * (cell_index + 1), 3) = &
-               & points(1:num_unitcell_points, 3)
        end do
     end do
     deallocate(unitcell_dim)
