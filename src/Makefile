@@ -25,9 +25,6 @@ $(OUTDIR)voronoi : voronoi.o
 voronoi.o : voronoi.f90
 	$(FC) -o $(SRCDIR)$(@F) -c $< $(FCFLAGS)
 
-intre2.o : intre2.f90
-	$(FC) -o $(SRCDIR)$(@F) -c $< $(FCFLAGS)
-
 # Library ===================================
 #nrtype.o : nrtype.f90
 #	$(FC) -o $(LIBDIR)$(@F) -c $< $(FCFLAGS)
