@@ -323,14 +323,12 @@ CONTAINS
        read(UNIT=fileid, FMT="(A)", IOSTAT=stat) line
        if (stat/=0) then
           write(*,*) "line=*"// line // "*"
-          write(*,*) "Error occured while reading file:", filename
+          write(*,*) "Error: get_volume(file): there is no keyword 'volume:' in file, ", filename
           call EXIT(1)
        end if
        if (INDEX(line, "volume:") > 0) then
           read(UNIT=line(INDEX(line, ':') + 1:), FMT=*) volume
           RETURN
-       else
-          write(*,*) "Error: get_volume(file): there is no keyword 'volume:' in file, ", filename
        end if
     end do
   END SUBROUTINE get_volume
