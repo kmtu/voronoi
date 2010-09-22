@@ -273,6 +273,8 @@ CONTAINS
              call EXIT(1)
           end if
           call get_volume(temp_qconvex_fileid, temp_qconvex_filename, volume)
+
+          ! Output results
           write(UNIT=volume_result_fileid, FMT=*) volume
 !          density(i) = 1./volume
 !          write(UNIT=volume_result_fileid, FMT=*) "Region ", i, ":", volume, density(i)
