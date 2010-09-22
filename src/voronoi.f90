@@ -273,13 +273,14 @@ CONTAINS
              call EXIT(1)
           end if
           call get_volume(temp_qconvex_fileid, temp_qconvex_filename, volume)
-          density(i) = 1./volume
+          write(UNIT=volume_result_fileid, FMT=*) volume
+!          density(i) = 1./volume
 !          write(UNIT=volume_result_fileid, FMT=*) "Region ", i, ":", volume, density(i)
-          close(UNIT=temp_qconvex_fileid, STATUS='KEEP')
+          close(UNIT=temp_qconvex_fileid, STATUS='KEEP') !keep the file for debugging purpose
        end if
     end do
 !    write(UNIT=volume_result_fileid, FMT=*) "Average density:", SUM(density)/SIZE(density)
-    write(UNIT=volume_result_fileid, FMT=*) SUM(density)/SIZE(density)
+!    write(UNIT=volume_result_fileid, FMT=*) SUM(density)/SIZE(density)
 
     deallocate(voronoi_region)
     deallocate(voronoi_vertices)
@@ -302,7 +303,7 @@ CONTAINS
     write(UNIT=temp_qhullinput_fileid, FMT=*) dim
     write(UNIT=temp_qhullinput_fileid, FMT=*) region(1)
     ! region(1) is the number of vertices, the rest are indexes of vertices
-    ! i.e. region(1) == size(region) - 1
+    ! i.e. region(1) == size(region) - 1 (minus 1 because 0 is the INF point)
     do i = 2, size(region)
        write(UNIT=temp_qhullinput_fileid, FMT=*) vertices(region(i), :)
     end do
@@ -322,12 +323,14 @@ CONTAINS
        read(UNIT=fileid, FMT="(A)", IOSTAT=stat) line
        if (stat/=0) then
           write(*,*) "line=*"// line // "*"
-          write(*,*) "Error: get_volume(file): there is no keyword 'volume:' in file, ", filename
+          write(*,*) "Error occured while reading file:", filename
           call EXIT(1)
        end if
        if (INDEX(line, "volume:") > 0) then
           read(UNIT=line(INDEX(line, ':') + 1:), FMT=*) volume
           RETURN
+       else
+          write(*,*) "Error: get_volume(file): there is no keyword 'volume:' in file, ", filename
        end if
     end do
   END SUBROUTINE get_volume
