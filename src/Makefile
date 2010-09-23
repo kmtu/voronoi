@@ -32,5 +32,5 @@ voronoi.o : voronoi.f90
 .PHONY: clean
 clean :
 	rm -f $(SRCDIR)*.o $(MODDIR)*.mod
-	rm -f $(addprefix $(OUTDIR), $(PROGRAM) )
+	rm -f $(PROGRAM)
 	rm -f *~ $(SRCDIR)*~
