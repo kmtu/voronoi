@@ -275,7 +275,8 @@ CONTAINS
           call get_volume(temp_qconvex_fileid, temp_qconvex_filename, volume)
 
           ! Output results
-          write(UNIT=volume_result_fileid, FMT=*) volume
+!          write(UNIT=volume_result_fileid, FMT=*) volume    !output area
+          write(UNIT=volume_result_fileid, FMT=*) 1./volume !output reciprocal area
 !          density(i) = 1./volume
 !          write(UNIT=volume_result_fileid, FMT=*) "Region ", i, ":", volume, density(i)
           close(UNIT=temp_qconvex_fileid, STATUS='KEEP') !keep the file for debugging purpose
