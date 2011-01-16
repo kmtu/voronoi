@@ -207,7 +207,7 @@ CONTAINS
     INTEGER, DIMENSION(:), ALLOCATABLE :: voronoi_region
     REAL(KIND=8), DIMENSION(:, :), ALLOCATABLE :: voronoi_vertices
     CHARACTER(LEN=1024) :: line
-    REAL(KIND=8), DIMENSION(:), ALLOCATABLE :: density
+!    REAL(KIND=8), DIMENSION(:), ALLOCATABLE :: density
     REAL(KIND=8) :: volume
 
     call SYSTEM("qvoronoi o < " // temp_data_filename // " > " // temp_qvoronoi_filename)
@@ -244,11 +244,11 @@ CONTAINS
        call EXIT(1)
     end if
 
-    allocate(density(num_unitcell_points), STAT=stat)
-    if (stat /= 0 ) then
-       write(*,*) "Error: allocating density() fail."
-       call EXIT(1)
-    end if
+!     allocate(density(num_unitcell_points), STAT=stat)
+!     if (stat /= 0 ) then
+!        write(*,*) "Error: allocating density() fail."
+!        call EXIT(1)
+!     end if
 
     !read voronoi region one by one and simultaneously use qhull to calculate its volume
     do i = 1, num_unitcell_points
@@ -287,7 +287,7 @@ CONTAINS
 
     deallocate(voronoi_region)
     deallocate(voronoi_vertices)
-    deallocate(density)
+!    deallocate(density)
     close(UNIT=temp_qvoronoi_fileid, STATUS='KEEP')
   END SUBROUTINE use_qhull
 
