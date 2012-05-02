@@ -1,0 +1,1 @@
+g++ -Wall voronoi.cpp -I/home/kmtu/local/voro++-0.4.4/include/voro++/ -L/home/kmtu/local/voro++-0.4.4/lib/ -lvoro++ -o voronoi
