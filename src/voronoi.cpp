@@ -148,8 +148,13 @@ int main(int argc, char** argv) {
                     cout << "numAtomsPerMolecule = " << numAtomsPerMolecule << endl;
     
                     /* Read data frame by frame */
-                    for (int iFrame = 0; iFrame < 10; iFrame++)
+                    for (int iFrame = 0; iFrame < numFrames; iFrame++)
                     {
+                        /* Report progress on screen */
+                        int progress = int(double(iFrame)/double(numFrames)*100);
+                        int nextProgress = int(double(iFrame + 1)/double(numFrames)*100);
+                        if (progress < nextProgress) cout << nextProgress << "% is done" << endl;
+
                         double boxDimX = .0; 
                         double boxDimY = .0;
                         double boxDimZ = .0;
