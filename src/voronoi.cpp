@@ -76,6 +76,7 @@ int main(int argc, char** argv) {
     argp_parse (&argp, argc, argv, 0, 0, &arguments);
 
     /* Show the parsed arguments on the screen */
+    cout << "Voronoi analysis" << endl;
     cout << "outFile name = " << arguments.outFilename << endl;
 
     if (arguments.dataFilenames.size() > 0)
