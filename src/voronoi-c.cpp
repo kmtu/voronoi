@@ -23,7 +23,7 @@ static char args_doc[] = "dataFile(s)...";
 
 /* The options we understand. */
 static struct argp_option options[] = {
-    {"output",   'o', "outFile", 0,  "Output file." },
+    {"output",   'o', "outFile", 0,  "Output filename. Default: voronoi.out" },
     { 0 }
 };
 
